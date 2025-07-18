@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
-Route::get('/', function (Request $request) {
-    return "hello";
-});
+Route::post('/register', [AuthController::class, 'register']);

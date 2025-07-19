@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
+
+    protected $fillable = ['user_id','title','description','link','codesnippet','category_id'];
+
+    public $timestamps = false;
+
     // Eloquent Relationships
     public function user()
     {

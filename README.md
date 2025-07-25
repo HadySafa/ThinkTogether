@@ -2,7 +2,6 @@
 
 **Think Together** is a Community Knowledge Sharing Platform. It’s a user-friendly web application where anyone can share solutions to problems, innovative ideas, personal achievements, helpful tips, and more. The platform encourages interaction by allowing users to engage through comments, upvotes, and downvotes.
 
----
 
 ## Core Features
 
@@ -30,7 +29,7 @@
 
 - **User Dashboard:** A profile section where users can view their posts, comments, and reactions history.
 
----
+
 
 ## Development Approach
 
@@ -39,8 +38,6 @@ This project uses an **API-driven architecture**:
 - The backend serves RESTful APIs, providing endpoints for data interaction.  
 - The frontend communicates with the backend APIs to fetch, display, and manipulate data dynamically.
 
----
-
 ## Tech Stack
 
 - **Backend:** PHP/Laravel  
@@ -48,4 +45,40 @@ This project uses an **API-driven architecture**:
 - **Database:** MySQL  
 - **Version Control:** Git and GitHub
 
+# Clone the repository
+git clone https://github.com/HadySafa/ThinkTogether-Backend.git
+cd ThinkTogether-Backend
+
+# Create a new MySQL database (e.g., think_together)
+
+# Copy environment file
+cp .env.example .env
+
+# Edit the .env file to update your database credentials
+# DB_DATABASE=your_database_name
+# DB_USERNAME=your_database_user
+# DB_PASSWORD=your_database_password
+
+# Install PHP dependencies
+composer install
+
+# Generate Laravel application key
+php artisan key:generate
+
+# Run database migrations
+php artisan migrate
+
+# Generate JWT secret key
+php artisan jwt:secret
+
+
+## Note
+
+The frontend part of this project is in a separate repository. Make sure to [check it out here](https://github.com/HadySafa/ThinkTogether-Frontend) for the complete application.
+
+---
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+
+
+

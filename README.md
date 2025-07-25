@@ -77,7 +77,8 @@ composer install
 - Generate Laravel application key
 
 ``` bash
-php artisan key:generate```
+php artisan key:generate
+```
 
 - Run database migrations
 

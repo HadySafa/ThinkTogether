@@ -16,4 +16,7 @@ class Reaction extends Model
     {
         return $this->belongsTo(Post::class);
     }
+
+    protected $fillable = ['reaction', 'post_id', 'user_id'];
+    public $timestamps = false;
 }

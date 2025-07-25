@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    // register
+
+    // 
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -22,7 +22,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => 'Bad request'], 400);
+            return response()->json(['message' => 'Invalid data.'], 422);
         }
 
         $validated = $validator->validated();
@@ -38,7 +38,7 @@ class AuthController extends Controller
         return response()->json(['user' => $user], 201);
     }
 
-    // login
+    // 
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -47,7 +47,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => 'Bad request'], 400);
+            return response()->json(['message' => 'Invalid data.'], 422);
         }
 
         $validated = $validator->validated();
@@ -59,8 +59,10 @@ class AuthController extends Controller
         return response()->json([
             'token' => $token,
         ], 200);
+        
     }
 
+    // check if a username is available
     public function checkUsername(Request $request)
     {
         $validator = Validator::make($request->query(), [
@@ -69,15 +71,43 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'error' => 'Invalid username parameter.'
-            ], 400);
+                'message' => 'Invalid data.'
+            ], 422);
         }
 
         $validated = $validator->validated();
 
         $user = User::where('username', $validated['username'])->first();
 
-        return response()->json(['available' => $user ? "false" : "true"],200);
+        return response()->json(['available' => $user ? false : true], 200);
+    }
+
+    //  
+    public function changePassword(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'current_password' => 'required',
+            'new_password' => 'required|string|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Invalid data.'], 422);
+        }
+
+        $validated = $validator->validated();
+
+        $user = auth('api')->user();
+
+        if (!Hash::check($validated['current_password'], $user->password)) {
+            return response()->json(['message' => 'Current password is incorrect'], 403);
+        }
+
+        $user->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        return response()->json(['message' => 'Password changed successfully'], 200);
         
     }
 }

@@ -4,15 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     *  Return the comments of a specific post
      */
-    public function index()
+    public function index($id)
     {
         //
+        $comments = Comment::with('user:id,username')->where('post_id', $id)->get();
+        return response()->json(['comments' => $comments], 200);
     }
 
     /**
@@ -26,9 +29,27 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
         //
+        $validator = Validator::make($request->all(), [
+            'comment' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Invalid data.'], 422);
+        }
+
+        $validated = $validator->validated();
+        $user = auth('api')->user();
+
+        $comment = Comment::create([
+            'user_id' => $user->id,
+            'post_id' => $id,
+            'comment' => $validated['comment'],
+        ]);
+
+        return response()->json(['comment' => $comment], 201);
     }
 
     /**

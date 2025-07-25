@@ -4,15 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Reaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ReactionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($id)
     {
         //
+        $reactions = Reaction::with('user:id,username')->where('post_id', $id)->get();
+        return response()->json(['reactions' => $reactions], 200);
     }
 
     /**
@@ -26,9 +29,28 @@ class ReactionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request,$id)
     {
         //
+        $validator = Validator::make($request->all(), [
+            'reaction' => 'required|string',
+        ]);
+
+        
+        if ($validator->fails()) {
+            return response()->json(['message' => 'incorrect data.'], 422);
+        }
+    
+        $validated = $validator->validated();
+        $user = auth('api')->user();
+
+        $reaction = Reaction::create([
+            'user_id' => $user->id,
+            'post_id' => $id,
+            'reaction' => $validated['reaction'],
+        ]);
+
+        return response()->json(['reaction' => $reaction], 201);
     }
 
     /**

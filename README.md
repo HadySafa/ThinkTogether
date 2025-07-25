@@ -74,7 +74,7 @@ DB_DATABASE=<your_database_name>
 composer install
 ```
 
--Generate Laravel application key
+- Generate Laravel application key
 
 ``` bash
 php artisan key:generate```
@@ -89,7 +89,8 @@ php artisan migrate
 - Generate JWT secret key
 
 ``` bash
-php artisan jwt:secret```
+php artisan jwt:secret
+```
 
 
 ## Note
